@@ -2,7 +2,7 @@ package cs158project;
 
 /**
  * Hello world example
- * @author M Layman
+ * @author Michael L
  */
 public class HelloWorld {
 
