@@ -1,6 +1,7 @@
 package cs158project;
 
 /**
+ * Represents a network resource.
  * 
  * @author Michael L
  */
