@@ -7,6 +7,11 @@ package cs158project;
  */
 public class ResourcePlugin {
 	
+	/**
+	 * Connection settings to the resource. Read-only.
+	 */
+	public final ConnectionConfiguration configuration;
+	
 	@SuppressWarnings("unused")
 	private ResourcePlugin() {
 		this(null, 0, null);
@@ -16,9 +21,5 @@ public class ResourcePlugin {
 		this.configuration = new ConnectionConfiguration(host, port, name);
 	}
 
-	/**
-	 * Connection settings to the resource. Read-only.
-	 */
-	public final ConnectionConfiguration configuration;
 	
 }
