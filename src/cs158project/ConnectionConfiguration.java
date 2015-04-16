@@ -9,17 +9,6 @@ import java.util.UUID;
  */
 public class ConnectionConfiguration {
 	
-	public ConnectionConfiguration(String host, int port) {
-		this(host, port, "");
-	}
-	
-	public ConnectionConfiguration(String host, int port, String name) {
-		this.id = UUID.randomUUID();
-		this.port = port;
-		this.host = host;
-		this.name = name;
-	}
-	
 	/**
 	 * Unique connection identifier. Read-only.
 	 */
@@ -39,4 +28,19 @@ public class ConnectionConfiguration {
 	 * Connection name. Read-only.
 	 */
 	public final String name;
+	
+	//Constructor 1
+	public ConnectionConfiguration(String host, int port) {
+		this(host, port, "");
+	}
+	
+	//Constructor 2
+	public ConnectionConfiguration(String host, int port, String name) {
+		this.id = UUID.randomUUID();
+		this.port = port;
+		this.host = host;
+		this.name = name;
+	}
+	
+	
 }
