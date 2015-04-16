@@ -7,11 +7,17 @@ package cs158project;
  */
 public class ResourcePlugin {
 	
-	@SuppressWarnings("unused")
-	private ResourcePlugin() {
+	public ResourcePlugin() {
 		this(null, 0, null);
 	}
 	
+	/**
+	 * ResourcePlugin constructor.
+	 * 
+	 * @param host Network resource host name.
+	 * @param port Network resource port number.
+	 * @param name Resource alias.
+	 */
 	public ResourcePlugin(String host, int port, String name) {
 		this.configuration = new ConnectionConfiguration(host, port, name);
 	}

@@ -1,7 +1,7 @@
 package cs158project;
 
 import java.util.Hashtable;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * Directory of plugin resources.
@@ -31,13 +31,15 @@ public class ResourcePool {
 	}
 
 	/**
-	 * Returns the identifiers of registered resources.
+	 * Returns an iterator of registered resources.
 	 * 
-	 * @return Returns a set of resource names.
+	 * @return Returns an iterator of resource names.
 	 */
-	public Set<String> getAvailableResources() {
-		return resources_.keySet();
+	public Iterator<String> getAvailableResources() {
+		return resources_.keySet().iterator();
 	}
+	
+	
 	
 	/**
 	 * Retrieves the resource for the given id.
