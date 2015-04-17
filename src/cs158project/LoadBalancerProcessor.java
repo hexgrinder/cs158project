@@ -12,9 +12,6 @@ public class LoadBalancerProcessor implements Runnable {
 	private Socket request_;
 	private ConnectionProtocol protocol_;
 	
-	// TODO: remove this
-	public LoadBalancerProcessor() {}
-	
 	public LoadBalancerProcessor(Socket request, ConnectionProtocol protocol) {
 		request_ = request;
 		protocol_ = protocol;
@@ -23,39 +20,33 @@ public class LoadBalancerProcessor implements Runnable {
 	@Override
 	public void run() {
 		
-		Random r = new Random();
 		
 		try {
-			System.out.println(String.format(">> Part 1 servicing: %s", id_));
-			Thread.sleep(r.nextInt(2500));
-			System.out.println(String.format(">> Part 2 servicing: %s", id_));
-			//process_(request_);
-			// TODO: Test multiple closes
-			//request_.close();
-			//request_.close();
+			DEBUG_process_(request_);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-/*		
- 			catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-*/		
-		finally {
-			
+		} finally {
+			try {
+				request_.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void process_(Socket request) throws InterruptedException {
+	private void DEBUG_process_(Socket request) throws InterruptedException {
 		
 		// query protocol for destination
 		ConnectionConfiguration destination = protocol_.getResource();
 		
+		Random r = new Random();
+		
 		// TODO: create a connection between inbound and outbound
-		Thread.sleep(500);
-		Thread.yield();
+		System.out.println(String.format(">> Part 1 servicing: %s", id_));
+		Thread.sleep(r.nextInt(2500));
+		System.out.println(String.format(">> Part 2 servicing: %s", id_));
 	}
 
 	/* (non-Javadoc)
