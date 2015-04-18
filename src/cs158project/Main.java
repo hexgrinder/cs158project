@@ -10,8 +10,8 @@ public class Main {
 		
 		// setup web server endpoints
 		ResourcePool resources = new ResourcePool();
-		resources.register(new ResourcePlugin("localhost", 1100, "WebServer_1"));
-		resources.register(new ResourcePlugin("localhost", 1200, "Webserver_2"));
+		resources.register(new ResourcePlugin("10.10.10.2", 80, "WebServer_1"));
+		resources.register(new ResourcePlugin("10.10.10.3", 80, "Webserver_2"));
 		
 		// set connection protocol
 		LoadBalancer.setProtocol(new DebugConnection(resources));
@@ -20,7 +20,7 @@ public class Main {
 		LoadBalancer.start();
 		try {
 			System.out.println("Main thread pause...");
-			Thread.sleep(10);
+			Thread.sleep(5000);
 			System.out.println("Main thread restart...");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
