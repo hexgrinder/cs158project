@@ -5,12 +5,18 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 import java.util.UUID;
 
+/**
+ * Processor for handling connections to the LoadBalancerService class.
+ * 
+ * @author Michael L., Torjus D.
+ */
 public class LoadBalancerProcessor implements Runnable {
 
 	private final UUID id_ = UUID.randomUUID();
@@ -27,18 +33,18 @@ public class LoadBalancerProcessor implements Runnable {
 	public void run() {
 		
 		try {
-			
+/*			
 			//Class HttpURLConnection.getHeaderField(int n)
 			//to use for finding and keeping track of sessioninfo
 			
 			//ADD call to getResource()
-			ConnectionConfiguration serverConnection = protocol_.getResource();
+			connectionConfiguration serverConnection = protocol_.getResource();
 			InetAddress clientAddress = request_.getInetAddress();
 			
 			//fetch IP of connection client
 			String address = clientAddress.toString();
 			int portNumber = request_.getPort();
-			ConnectionConfiguration clientConnection = new ConnectionConfiguration(address, portNumber, "client");
+			connectionConfiguration clientConnection = new ConnectionConfiguration(address, portNumber, "client");
 			
 			Socket serverSocket = new Socket(serverConnection.host, serverConnection.port);
 			
@@ -46,7 +52,9 @@ public class LoadBalancerProcessor implements Runnable {
 			//10.10.10.2
 			//10.10.10.3
 			//port 80
-		
+*/
+			ML_printToConsole_(request_);
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,6 +63,7 @@ public class LoadBalancerProcessor implements Runnable {
 			e.printStackTrace();
 		} finally {
 			try {
+				System.out.println("[DEBUG] Closing request connection.");
 				request_.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -62,8 +71,28 @@ public class LoadBalancerProcessor implements Runnable {
 			}
 		}
 	}
-
-	private void ML_process_(Socket inbound) throws InterruptedException, UnknownHostException, IOException {
+	
+	/**
+	 * Debugging function. Prints to the console.
+	 * 
+	 * @param sock Socket object.
+	 * @throws IOException Thrown when there is an issue accessing the 
+	 * socket object.
+	 */
+	private void ML_printToConsole_(Socket sock) throws IOException {
+		
+		BufferedReader inbufread = new BufferedReader(
+			new InputStreamReader(sock.getInputStream()));
+		
+		String str;
+		while (null != (str = inbufread.readLine())) {
+			System.out.println(str);
+		}
+		
+		inbufread.close();
+	}
+	
+	private void ML_process_(Socket inbound) throws UnknownHostException, IOException {
 		
 		// query protocol for destination
 		ConnectionConfiguration destination = protocol_.getResource();
@@ -93,4 +122,5 @@ public class LoadBalancerProcessor implements Runnable {
 		request_.close();
 		super.finalize();
 	}
+
 }
