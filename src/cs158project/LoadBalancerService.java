@@ -1,9 +1,12 @@
 package cs158project;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -133,14 +136,13 @@ public class LoadBalancerService implements Runnable {
 				
 			}
 			
-			
 		} catch (SocketException e) {
 			// DEBUG
-			System.out.println("[DEBUG] RUN -> SocketExceoption: Socket Closed.");
-			//e.printStackTrace();
+			System.out.println("[DEBUG] RUN -> SocketException.");
+			e.printStackTrace();
 		} catch (IOException e) {
 			// DEBUG
-			System.out.println("[DEBUG] RUN -> IOExceoption.");
+			System.out.println("[DEBUG] RUN -> IOException.");
 			e.printStackTrace();
 		} finally {
 			System.out.println("[DEBUG] Trying to close server socket.");
