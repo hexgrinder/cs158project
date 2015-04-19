@@ -14,7 +14,7 @@ public class LoadBalancer {
 	 * Defines the connection settings for load balancer 1. 
 	 */
 	private static final ConnectionConfiguration SERVICE_CONFIG_1 
-		= new ConnectionConfiguration("10.10.10.1", 6666, "Load_Balancer_1");
+		= new ConnectionConfiguration("10.10.10.1", 80, "Load_Balancer_1");
 	
 	private static ConnectionProtocol protocol_;
 	private static LoadBalancerService service_;

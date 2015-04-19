@@ -11,11 +11,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Distributes in-bound requests according to a connection protocol.
  * 
- * Implements the Runnable interface. Creates and manages its own thread 
- * to service in-bound requests. 
+ * Implements the Runnable interface. Creates and manages its own separate 
+ * thread to service in-bound requests. 
  * 
  * Note: This class was designed as a 'lone-wolf' service. Unpredictable 
- * behavior may result if implemented as a shared resources amongst 
+ * behavior may result if implemented as a shared resources among 
  * concurrent processes.
  * 
  * @author Michael L., Torjus D.
@@ -72,6 +72,8 @@ public class LoadBalancerService implements Runnable {
 	 * Attempts to stop the service in an orderly matter. Stops listening for
 	 * incoming requests.  Allows existing requests to complete. 
 	 * 
+	 * Once this method is called, the service cannot be restarted.
+	 * 
 	 * Note: Successive stop() calls are silently ignored. A start() 
 	 * must be called prior for this method to take effect.
 	 */
@@ -83,6 +85,7 @@ public class LoadBalancerService implements Runnable {
 		}
 		
 		running_.set(false);
+		workers_.shutdown();
 		service_ = null;
 		
 		try {
@@ -127,18 +130,20 @@ public class LoadBalancerService implements Runnable {
 				// in-bound requests on a separate thread
 				workers_.execute(
 					new LoadBalancerProcessor(request, protocol_));
+				
 			}
+			
 			
 		} catch (SocketException e) {
 			// DEBUG
-			System.out.println("\n[DEBUG] RUN -> SocketExceoption.");
-			e.printStackTrace();
+			System.out.println("[DEBUG] RUN -> SocketExceoption: Socket Closed.");
+			//e.printStackTrace();
 		} catch (IOException e) {
 			// DEBUG
-			System.out.println("\n[DEBUG] RUN -> IOExceoption.");
+			System.out.println("[DEBUG] RUN -> IOExceoption.");
 			e.printStackTrace();
 		} finally {
-			System.out.println("\n[DEBUG] Trying to close server socket.");
+			System.out.println("[DEBUG] Trying to close server socket.");
 			if (null != serverSocket_ && !serverSocket_.isClosed()) {
 				System.out.println("[DEBUG] Closing server socket.");
 				try {
@@ -147,7 +152,11 @@ public class LoadBalancerService implements Runnable {
 					System.out.println("[DEBUG] Exception closing server socket.");
 					// DEBUG
 					e.printStackTrace();
+				} finally {
+					System.out.println("[DEBUG] RUN -> Terminating processor thread.");
 				}
+			} else {
+				System.out.println("[DEBUG] RUN -> Already closed. Terminating processor thread.");
 			}
 		}
 	}
