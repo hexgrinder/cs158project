@@ -1,5 +1,7 @@
 package cs158project;
 
+import java.io.IOException;
+
 public class Main {
 
 	// TODO: Use rmi to setup cli starts / stops
@@ -14,8 +16,18 @@ public class Main {
 		resources.register(new ResourcePlugin("10.10.10.3", 80, "Webserver_2"));
 		
 		// set connection protocol
-		LoadBalancer.setProtocol(new DebugConnectionProtocol(resources));
+		LoadBalancer.setProtocol(
+			new DebugConnectionProtocol("10.10.10.1", 6666, "DEBUG"));
 		
+		// emulate a remote, responding web-server
+		try {
+			(new DebugSingleShotServer(6666, 15000))
+				.listen();
+		} catch (IOException e1) {
+			System.out.println("[DEBUG] Cannot start remote server.");
+			e1.printStackTrace();
+		}
+				
 		System.out.println("Start balancing...");
 		LoadBalancer.start();
 		try {
@@ -23,7 +35,7 @@ public class Main {
 			// sleep while i do tests
 			// http request to a test server:
 			// curl --data hello http://10.10.10.1  
-			Thread.sleep(15000);
+			Thread.sleep(25000);
 			System.out.println("Main thread restart...");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
