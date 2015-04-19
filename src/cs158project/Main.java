@@ -14,13 +14,16 @@ public class Main {
 		resources.register(new ResourcePlugin("10.10.10.3", 80, "Webserver_2"));
 		
 		// set connection protocol
-		LoadBalancer.setProtocol(new DebugConnection(resources));
+		LoadBalancer.setProtocol(new DebugConnectionProtocol(resources));
 		
 		System.out.println("Start balancing...");
 		LoadBalancer.start();
 		try {
 			System.out.println("Main thread pause...");
-			Thread.sleep(5000);
+			// sleep while i do tests
+			// http request to a test server:
+			// curl --data hello http://10.10.10.1  
+			Thread.sleep(15000);
 			System.out.println("Main thread restart...");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
