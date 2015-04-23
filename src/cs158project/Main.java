@@ -8,7 +8,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		System.out.println("Init...");
+		System.out.println("[DEBUG] Init...");
 		
 		// setup web server endpoints
 		ResourcePool resources = new ResourcePool();
@@ -16,31 +16,29 @@ public class Main {
 		resources.register(new ResourcePlugin("10.10.10.3", 80, "Webserver_2"));
 		
 		// set connection protocol
-		LoadBalancer.setProtocol(
-			new DebugConnectionProtocol("10.10.10.1", 6666, "DEBUG"));
+		//LoadBalancer.setProtocol(new DebugConnectionProtocol());
 		
-		// emulate a remote, responding web-server
 		try {
-			(new DebugSingleShotServer(6666, 15000))
-				.listen();
-		} catch (IOException e1) {
-			System.out.println("[DEBUG] Cannot start remote server.");
-			e1.printStackTrace();
-		}
-				
-		System.out.println("Start balancing...");
-		LoadBalancer.start();
-		try {
+			LoadBalancingService svc = new LoadBalancingService(
+				80, new DebugConnectionProtocol());
+		
+			// start echo
+			//(new DebugSingleShotServer(6666, 15000)).listen();
+		
+			System.out.println("Start balancing...");
+			//LoadBalancer.start();
+			svc.start();
 			System.out.println("Main thread pause...");
-			// sleep while i do tests
-			// http request to a test server:
-			// curl --data hello http://10.10.10.1  
-			Thread.sleep(25000);
+			Thread.sleep(60000);
 			System.out.println("Main thread restart...");
+			svc.stop();
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		LoadBalancer.stop();
+		//LoadBalancer.stop();
 		System.out.println("Stop balancing...");
 /*		
 		//System.out.println("Restart...");
