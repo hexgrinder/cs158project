@@ -31,6 +31,10 @@ public class DebugSingleShotServer implements Runnable {
 		try {
 			server_.setSoTimeout(wait_);
 			System.out.println("[DEBUG ECHO] Start echo...");
+			Debug.println(
+				"ECHO", 
+				String.format("Listening on %s", 
+					server_.getLocalSocketAddress()));
 			inbound_ = server_.accept();
 			System.out.println("[DEBUG ECHO] Echo receive...");
 			ML_printToConsole_(inbound_);
@@ -77,11 +81,10 @@ public class DebugSingleShotServer implements Runnable {
 	private void ML_printToConsole_(Socket sock) throws IOException {
 		
 		// retreives sources address and port
-		System.out.println(
+		Debug.println("ECHO",
 			String.format(
-				"[DEBUG ECHO] *** source port: %d, source address: %s", 
-				sock.getPort(),
-				sock.getInetAddress()));
+				"Received a message from %s", 
+				sock.getLocalSocketAddress()));
 		
 		BufferedReader inbufread = new BufferedReader(
 			new InputStreamReader(sock.getInputStream()));

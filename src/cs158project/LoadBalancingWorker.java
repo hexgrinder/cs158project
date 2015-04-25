@@ -55,8 +55,8 @@ public class LoadBalancingWorker extends Thread {
 		Debug.println(
 			"WORKER",
 			String.format(
-				"Processing inbound from host %s", 
-				channel.getRemoteAddress()));
+				"Processing inbound from %s", 
+				channel.socket().getRemoteSocketAddress()));
 		
 		Debug.println("WORKER", "writing.");
 		
