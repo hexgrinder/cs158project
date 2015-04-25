@@ -3,10 +3,7 @@ package cs158project;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
-import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
@@ -128,13 +125,24 @@ public class LoadBalancingService implements Runnable {
 	@Override
 	public void run() {
 		
+		Debug.println("SERVICE", "Service starting...");
 		// does this keep it open?
 		SocketChannel request;
 		
 		try {
 			
 			serverSocket_ = ServerSocketChannel.open();
-			
+/* // java 6
+			serverSocket_.socket().bind(new InetSocketAddress(
+					InetAddress.getLocalHost(), serviceConfig_.port), 
+				DEFAULT_BACKLOG_SIZE);
+*/			
+			Debug.println(
+				"SERVICE", 
+				String.format(
+					"Running on address %s", 
+					serverSocket_.socket().getLocalSocketAddress()));
+//java 8		
 			serverSocket_.bind(
 				new InetSocketAddress(
 					InetAddress.getLocalHost(), serviceConfig_.port), 
@@ -201,4 +209,37 @@ public class LoadBalancingService implements Runnable {
 		
 		super.finalize();
 	}
+	
+	public static void main(String[] args) {
+		
+		Debug.println("MAIN", "Init...");
+		
+		// setup web server endpoints
+		ResourcePool resources = new ResourcePool();
+		resources.register(new ResourcePlugin("10.10.10.2", 80, "WebServer_1"));
+		resources.register(new ResourcePlugin("10.10.10.3", 80, "Webserver_2"));
+		
+		try {
+			LoadBalancingService svc = new LoadBalancingService(
+				80, new DebugConnectionProtocol());
+		
+			// uncomment to start a listening server: starts echo server
+			//(new DebugSingleShotServer(6666, 15000)).listen();
+		
+			Debug.println("MAIN", "Start balancing...");
+			svc.start();
+			Debug.println("MAIN", "Main thread pause...");
+			Thread.sleep(20000);
+			Debug.println("MAIN", "Main thread restart...");
+			svc.stop();
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Debug.println("MAIN", "Stop balancing.");
+	}
+
 }
