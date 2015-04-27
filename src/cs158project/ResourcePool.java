@@ -39,6 +39,10 @@ public class ResourcePool {
 		return resources_.keySet().iterator();
 	}
 	
+	public ResourcePlugin getResourceFromName(String name){
+		return resources_.get(name);
+	}
+	
 	
 	
 	/**

@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class LoadBalancingService implements Runnable {
 	
+
 	private final static int DEFAULT_WORKER_POOL_SIZE = 25;
 	private final static int DEFAULT_BACKLOG_SIZE = 10;
 	private final static int DEFAULT_PORT = 80;
@@ -156,6 +157,8 @@ public class LoadBalancingService implements Runnable {
 				// listening will block until stop() method is called 
 				request = serverSocket_.accept();
 				
+				
+				
 				// in-bound requests on a separate thread
 				workers_.execute(
 					new LoadBalancingWorker(request, protocol_));
@@ -219,6 +222,9 @@ public class LoadBalancingService implements Runnable {
 		resources.register(new ResourcePlugin("10.10.10.2", 80, "WebServer_1"));
 		resources.register(new ResourcePlugin("10.10.10.3", 80, "Webserver_2"));
 		
+		//interface ConnectionProtocol, implemented in LoadBalancingAlgoritmh
+		LoadBalancingAlgorithm LBA = new LoadBalancingAlgorithm(resources);
+		
 		try {
 			LoadBalancingService svc = new LoadBalancingService(
 				80, new DebugConnectionProtocol());
@@ -228,14 +234,19 @@ public class LoadBalancingService implements Runnable {
 		
 			Debug.println("MAIN", "Start balancing...");
 			svc.start();
+			
+			/*
 			Debug.println("MAIN", "Main thread pause...");
 			Thread.sleep(20000);
 			Debug.println("MAIN", "Main thread restart...");
 			svc.stop();
 			
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		*/
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		

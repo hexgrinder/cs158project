@@ -60,6 +60,7 @@ public class LoadBalancingWorker extends Thread {
 		
 		Debug.println("WORKER", "writing.");
 		
+		//found in ConnectionProtocol interface for loadbalancingalgo
 		ConnectionConfiguration dest = protocol.getResource();
 		
 		InetSocketAddress destaddr = new InetSocketAddress(

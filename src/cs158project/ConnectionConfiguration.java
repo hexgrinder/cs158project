@@ -41,6 +41,17 @@ public class ConnectionConfiguration {
 		this.host = host;
 		this.name = name;
 	}
-	
+	public UUID getID(){
+		return id;
+	}
+	public String host(){
+		return host;
+	}
+	public int port(){
+		return port;
+	}
+	public String getName(){
+		return name;
+	}
 	
 }
