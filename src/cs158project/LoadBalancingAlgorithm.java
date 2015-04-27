@@ -6,8 +6,9 @@ import java.util.Hashtable;
 /**
  * Implements ConnectionProtocol
  * Defines behavior for providing connections to network resources.
+ * Assigns connections in a round robin fashion.
  * 
- * @author Michael L.
+ * @author Torjus D.
  */
 class LoadBalancingAlgorithm implements ConnectionProtocol {
 	private int numberOfConnections = 0;
@@ -24,44 +25,34 @@ class LoadBalancingAlgorithm implements ConnectionProtocol {
 	}
 	
 	
-	
+	//Does not save inbound-outgoing connection pair.
 	public ConnectionConfiguration getResource(){
 		
 		// code for round robin assignment of resources.
 		// flips between one and zero.
 		Iterator<String> iterator = resources.getAvailableResources();
-		
+						
 		while (iterator.hasNext()) {
 			plugins.add( iterator.next() );
+			numberOfConnections++;
 		}
-		
+						
 		ConnectionConfiguration config =  resources.getResourceFromName(plugins.get(flip)).configuration;
-		flip = (flip + 1) % 2;
+		flip = (flip + 1) % numberOfConnections;
 		plugins.clear();
+		numberOfConnections = 0;
 		
 		return config;
 	}
 	
 	//Given inbund connection, return corresponding outgoing connection.
+	//Also adds inbound-outbound connection pairs.
 	public ConnectionConfiguration getResource(ConnectionConfiguration inbound){
-		//Already contains the connection-pair.
+		 //If Already contains the connection-pair:
 		if(connections.containsKey(inbound)) return connections.get(inbound);
-		
-		// code for round robin assignment of resources.
-		// flips between one and zero.
-		Iterator<String> iterator = resources.getAvailableResources();
-				
-		while (iterator.hasNext()) {
-			plugins.add( iterator.next() );
-			numberOfConnections++;
-		}
-				
-		ConnectionConfiguration config =  resources.getResourceFromName(plugins.get(flip)).configuration;
-		flip = (flip + 1) % numberOfConnections;
-		plugins.clear();
-		numberOfConnections = 0;
+		//else:
+		ConnectionConfiguration config = getResource();
 		connections.put(inbound, config);
-		
 		return config;
 	}	
 }

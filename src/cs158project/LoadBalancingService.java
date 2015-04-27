@@ -227,7 +227,7 @@ public class LoadBalancingService implements Runnable {
 		
 		try {
 			LoadBalancingService svc = new LoadBalancingService(
-				80, new DebugConnectionProtocol());
+				80, LBA);
 		
 			// uncomment to start a listening server: starts echo server
 			//(new DebugSingleShotServer(6666, 15000)).listen();
