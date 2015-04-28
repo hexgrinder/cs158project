@@ -8,7 +8,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		Debug.println("MAIN", "Init...");
+		Debug.println("MAIN 1", "Init...");
 		
 		// setup web server endpoints
 		ResourcePool resources = new ResourcePool();

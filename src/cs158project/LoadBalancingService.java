@@ -215,7 +215,7 @@ public class LoadBalancingService implements Runnable {
 	
 	public static void main(String[] args) {
 		
-		Debug.println("MAIN", "Init...");
+		Debug.println("MAIN 2", "Init...");
 		
 		// setup web server endpoints
 		ResourcePool resources = new ResourcePool();

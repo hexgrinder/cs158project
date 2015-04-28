@@ -44,10 +44,10 @@ public class ConnectionConfiguration {
 	public UUID getID(){
 		return id;
 	}
-	public String host(){
+	public String getHost(){
 		return host;
 	}
-	public int port(){
+	public int getPort(){
 		return port;
 	}
 	public String getName(){

@@ -49,7 +49,9 @@ class LoadBalancingAlgorithm implements ConnectionProtocol {
 	//Also adds inbound-outbound connection pairs.
 	public ConnectionConfiguration getResource(ConnectionConfiguration inbound){
 		 //If Already contains the connection-pair:
-		if(connections.containsKey(inbound)) return connections.get(inbound);
+		for( ConnectionConfiguration configuration : connections.keySet()){
+			if(configuration.getHost().equals(inbound.getHost())) return connections.get(configuration);
+		}
 		//else:
 		ConnectionConfiguration config = getResource();
 		connections.put(inbound, config);
