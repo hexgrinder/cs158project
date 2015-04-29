@@ -55,13 +55,14 @@ public class LoadBalancingWorker extends Thread {
 		Debug.println(
 			"WORKER",
 			String.format(
-				"Processing inbound from %s", 
+				"Processing inbound from origin %s", 
 				channel.socket().getRemoteSocketAddress()));
 		
-		Debug.println("WORKER", "writing.");
-		
 		//found in ConnectionProtocol interface for loadbalancingalgo
-		ConnectionConfiguration dest = protocol.getResource();
+		ConnectionConfiguration dest = protocol.getResource(
+			new ConnectionConfiguration(
+				channel.socket().getInetAddress().toString(),
+				channel.socket().getPort()));
 		
 		InetSocketAddress destaddr = new InetSocketAddress(
 			InetAddress.getByName(dest.host), dest.port);
@@ -69,7 +70,7 @@ public class LoadBalancingWorker extends Thread {
 		(new CircuitConnection())
 			.send(channel, destaddr);
 		
-		Debug.println("WORKER","process end.");
+		Debug.println("WORKER","Processing end.");
 		
 	}
 }
