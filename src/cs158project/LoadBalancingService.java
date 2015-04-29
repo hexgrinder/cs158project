@@ -142,11 +142,11 @@ public class LoadBalancingService implements Runnable {
 				"SERVICE", 
 				String.format(
 					"Running on address %s", 
-					InetAddress.getLocalHost()));
+					serverSocket_.socket().getLocalSocketAddress()));
 //java 8		
 			serverSocket_.bind(
 				new InetSocketAddress(
-					"10.10.10.1", 8080), 
+					InetAddress.getLocalHost(), serviceConfig_.port), 
 				DEFAULT_BACKLOG_SIZE);
 			
 			// this loop halts when:
