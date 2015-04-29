@@ -4,8 +4,6 @@ import java.io.IOException;
 
 public class Main {
 
-	// TODO: Use rmi to setup cli starts / stops
-	
 	public static void main(String[] args) {
 		
 		Debug.println("MAIN 1", "Init...");
@@ -27,23 +25,10 @@ public class Main {
 		
 			Debug.println("MAIN", "Start balancing...");
 			svc.start();
-			
-			/*
-			Debug.println("MAIN", "Main thread pause...");
-			Thread.sleep(20000);
-			Debug.println("MAIN", "Main thread restart...");
-			svc.stop();
-			
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		*/
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		Debug.println("MAIN", "Stop balancing.");
 	}
 
 }
