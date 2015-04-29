@@ -5,11 +5,27 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
+/**
+ * This is a background thread that processes the inbound request 
+ * received by the service. This class obtains the destination 
+ * resource from the load distribution protocol and opens the 
+ * connection between the inbound request and the destination 
+ * resource. 
+ * 
+ * @author Michael L., Torjus D.
+ */
 public class LoadBalancingWorker extends Thread {
 
 	private final SocketChannel channel_;
 	private final ConnectionProtocol protocol_;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param channel - The in-bound origin socket.
+	 * @param protocol - The connection protocol that determines the
+	 * destination IP.
+	 */
 	public LoadBalancingWorker(
 		SocketChannel channel,
 		ConnectionProtocol protocol) 
@@ -66,7 +82,8 @@ public class LoadBalancingWorker extends Thread {
 		
 		InetSocketAddress destaddr = new InetSocketAddress(
 			InetAddress.getByName(dest.host), dest.port);
-			
+		
+		// start the connection
 		(new CircuitConnection())
 			.send(channel, destaddr);
 		
