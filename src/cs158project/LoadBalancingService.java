@@ -126,7 +126,7 @@ public class LoadBalancingService implements Runnable {
 	@Override
 	public void run() {
 		
-		Debug.println("SERVICE", "Service starting...");
+		Debug.println("SERVICE", "Service startup...");
 		// does this keep it open?
 		SocketChannel request;
 		
@@ -138,17 +138,19 @@ public class LoadBalancingService implements Runnable {
 					InetAddress.getLocalHost(), serviceConfig_.port), 
 				DEFAULT_BACKLOG_SIZE);
 */			
-			Debug.println(
-				"SERVICE", 
-				String.format(
-					"Running on address %s", 
-					serverSocket_.socket().getLocalSocketAddress()));
+
 //java 8		
 			serverSocket_.bind(
 				new InetSocketAddress(
 					InetAddress.getLocalHost(), serviceConfig_.port), 
 				DEFAULT_BACKLOG_SIZE);
-			
+
+			Debug.println(
+				"SERVICE", 
+				String.format(
+					"Service ready. Running on host IP address: %s", 
+					serverSocket_.socket().getLocalSocketAddress()));
+
 			// this loop halts when:
 			// 1) accept() throws a SocketException (serverSocket closed)
 			// 2) accept() throws any other exception
@@ -156,8 +158,6 @@ public class LoadBalancingService implements Runnable {
 				
 				// listening will block until stop() method is called 
 				request = serverSocket_.accept();
-				
-				
 				
 				// in-bound requests on a separate thread
 				workers_.execute(
@@ -215,7 +215,7 @@ public class LoadBalancingService implements Runnable {
 	
 	public static void main(String[] args) {
 		
-		Debug.println("MAIN 2", "Init...");
+		Debug.println("MAIN 2", "Initializing load balancer service...");
 		
 		// setup web server endpoints
 		ResourcePool resources = new ResourcePool();
@@ -232,25 +232,11 @@ public class LoadBalancingService implements Runnable {
 			// uncomment to start a listening server: starts echo server
 			//(new DebugSingleShotServer(6666, 15000)).listen();
 		
-			Debug.println("MAIN", "Start balancing...");
 			svc.start();
-			
-			/*
-			Debug.println("MAIN", "Main thread pause...");
-			Thread.sleep(20000);
-			Debug.println("MAIN", "Main thread restart...");
-			svc.stop();
-			
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		*/
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		Debug.println("MAIN", "Stop balancing.");
 	}
 
 }

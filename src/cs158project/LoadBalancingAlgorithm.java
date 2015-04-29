@@ -18,14 +18,22 @@ class LoadBalancingAlgorithm implements ConnectionProtocol {
 	//inbound and outgoing connection
 	Hashtable<ConnectionConfiguration, ConnectionConfiguration> connections;
 	
-	LoadBalancingAlgorithm(ResourcePool resources){
+	/**
+	 * Constructor.
+	 * 
+	 * @param resources - Connections to resources that the algorithm 
+	 * will draw from.
+	 */
+	public LoadBalancingAlgorithm(ResourcePool resources){
 		this.resources = resources;
 		plugins = new ArrayList<String>();
 		connections = new Hashtable<ConnectionConfiguration, ConnectionConfiguration>();
 	}
 	
-	
-	//Does not save inbound-outgoing connection pair.
+	/**
+	 * Retrieves the next available connection to a resource.
+	 * Does not save inbound-outgoing connection pair. 
+	 */
 	public ConnectionConfiguration getResource(){
 		
 		// code for round robin assignment of resources.
@@ -45,8 +53,16 @@ class LoadBalancingAlgorithm implements ConnectionProtocol {
 		return config;
 	}
 	
-	//Given inbund connection, return corresponding outgoing connection.
-	//Also adds inbound-outbound connection pairs.
+	/**
+	 * Given inbound connection, return corresponding outgoing connection.
+	 * Also adds inbound-outbound connection pairs.
+	 *
+	 * @param inbound - A configuration describing the inbound connection. This
+	 * will be used to find a resource previously assigned. If there is none
+	 * found, the next available resource will be assigned to the inbound 
+	 * IP address.
+	 * @return A ConnectionConfiguration to a resource.
+	 */
 	public ConnectionConfiguration getResource(ConnectionConfiguration inbound){
 		 //If Already contains the connection-pair:
 		for( ConnectionConfiguration configuration : connections.keySet()){
