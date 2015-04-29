@@ -39,7 +39,6 @@ public class CircuitConnection {
 		destinationBuffer_.clear();
 		
 		try {
-			Debug.println("CIRCUIT", "starting.");
 			
 			// open connection to destination
 			destination = SocketChannel.open();
@@ -83,8 +82,6 @@ public class CircuitConnection {
 				.shutdownInput()
 				.shutdownOutput()
 				.close();
-			
-			Debug.println("CIRCUIT", "ending.");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
