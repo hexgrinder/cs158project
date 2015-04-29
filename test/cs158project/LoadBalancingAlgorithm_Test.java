@@ -61,7 +61,7 @@ public class LoadBalancingAlgorithm_Test {
 		config = lba.getResource(client2);
 		assertNotNull(config);
 		assertEquals("10.10.10.3", config.host);
-				
+		
 		// re-acquire same destination ip address
 		client1 = new ConnectionConfiguration("199.199.199.1", 1037);
 		config = lba.getResource(client1);
